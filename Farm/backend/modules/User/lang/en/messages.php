@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'User module is running',
+    'user.id_missing' => 'User ID is required',
+    'user.profile.retrieved' => 'User profile retrieved successfully',
+    'user.profile.failed' => 'Failed to retrieve user profile',
+    'user.profile.updated' => 'User profile updated successfully',
+    'user.profile.update_failed' => 'Failed to update user profile',
+    'user.list.retrieved' => 'Users retrieved successfully',
+    'user.list.failed' => 'Failed to retrieve users',
+    'user.delete.success' => 'User deleted successfully',
+    'user.delete.failed' => 'Failed to delete user',
+    'user.not_found' => 'User not found',
+
+    'verification.token_required' => 'Verification token is required',
+    'verification.email.success' => 'Email verified successfully',
+    'verification.email.resent' => 'Verification email resent',
+    'verification.status.failed' => 'Failed to get verification status',
+    'verification.phone.required' => 'Phone number is required',
+    'verification.phone.otp_sent' => 'OTP sent to phone',
+    'verification.phone.otp_failed' => 'Failed to send phone OTP',
+    'verification.phone.otp_required' => 'Phone OTP is required',
+    'verification.phone.success' => 'Phone verified successfully',
+    'verification.phone.verify_failed' => 'Failed to verify phone',
+
+    'account.lock.reason.default' => 'Locked by admin',
+    'account.lock.success' => 'Account locked successfully',
+    'account.unlock.success' => 'Account unlocked successfully',
+    'account.suspend.reason.default' => 'Suspended by admin',
+    'account.suspend.success' => 'Account suspended successfully',
+    'account.activate.success' => 'Account activated successfully',
+    'account.deactivate.success' => 'Account deactivated successfully',
+
+    'account.lock.failure' => 'Failed to lock account',
+    'account.unlock.failure' => 'Failed to unlock account',
+    'account.suspend.failure' => 'Failed to suspend account',
+    'account.activate.failure' => 'Failed to activate account',
+    'account.deactivate.failure' => 'Failed to deactivate account',
+    'account.history.failure' => 'Failed to get status history',
+    'account.access.failure' => 'Failed to check account access',
+    'account.identifiers.failure' => 'Failed to get user identifiers',
+];

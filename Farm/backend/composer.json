@@ -1,0 +1,42 @@
+{
+    "name": "phpfrarm/backend",
+    "description": "PHPFrarm - Enterprise API Development Framework",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-mysqli": "*",
+        "ext-mongodb": "*",
+        "ext-redis": "*",
+        "firebase/php-jwt": "^6.10",
+        "vlucas/phpdotenv": "^5.6",
+        "monolog/monolog": "^3.5",
+        "mongodb/mongodb": "^2.1",
+        "aws/aws-sdk-php": "*",
+        "phpoffice/phpspreadsheet": "^5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPFrarm\\": "app/",
+            "PHPFrarm\\Modules\\": "modules/",
+            "Modules\\": "modules/",
+            "PHPFrarm\\Middleware\\": "app/Middleware/",
+            "App\\": "app/",
+            "Farm\\Backend\\App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Farm\\Backend\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

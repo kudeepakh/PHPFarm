@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'యూజర్ మాడ్యూల్ నడుస్తోంది',
+    'user.id_missing' => 'యూజర్ ఐడి అవసరం',
+    'user.profile.retrieved' => 'యూజర్ ప్రొఫైల్ పొందబడింది',
+    'user.profile.failed' => 'యూజర్ ప్రొఫైల్ పొందలేకపోయింది',
+    'user.profile.updated' => 'యూజర్ ప్రొఫైల్ నవీకరించబడింది',
+    'user.profile.update_failed' => 'యూజర్ ప్రొఫైల్ నవీకరణ విఫలమైంది',
+    'user.list.retrieved' => 'యూజర్ లిస్టు పొందబడింది',
+    'user.list.failed' => 'యూజర్ లిస్టు పొందలేకపోయింది',
+    'user.delete.success' => 'యూజర్ తొలగించబడింది',
+    'user.delete.failed' => 'యూజర్ తొలగించలేకపోయింది',
+    'user.not_found' => 'యూజర్ కనబడలేదు',
+
+    'verification.token_required' => 'వెరిఫికేషన్ టోకెన్ అవసరం',
+    'verification.email.success' => 'ఈమెయిల్ విజయవంతంగా ధృవీకరించబడింది',
+    'verification.email.resent' => 'వెరిఫికేషన్ ఇమెయిల్ మళ్లీ పంపబడింది',
+    'verification.status.failed' => 'వెరిఫికేషన్ స్థితి పొందలేకపోయింది',
+    'verification.phone.required' => 'ఫోన్ నంబర్ అవసరం',
+    'verification.phone.otp_sent' => 'ఫోన్‌కు OTP పంపబడింది',
+    'verification.phone.otp_failed' => 'ఫోన్ OTP పంపించలేకపోయింది',
+    'verification.phone.otp_required' => 'ఫోన్ OTP అవసరం',
+    'verification.phone.success' => 'ఫోన్ విజయవంతంగా ధృవీకరించబడింది',
+    'verification.phone.verify_failed' => 'ఫోన్ ధృవీకరణ విఫలమైంది',
+
+    'account.lock.reason.default' => 'అడ్మిన్ ద్వారా లాక్ చేయబడింది',
+    'account.lock.success' => 'ఖాతా విజయవంతంగా లాక్ చేయబడింది',
+    'account.unlock.success' => 'ఖాతా విజయవంతంగా అన్‌లాక్ చేయబడింది',
+    'account.suspend.reason.default' => 'అడ్మిన్ ద్వారా సస్పెండ్ చేయబడింది',
+    'account.suspend.success' => 'ఖాతా విజయవంతంగా సస్పెండ్ చేయబడింది',
+    'account.activate.success' => 'ఖాతా విజయవంతంగా యాక్టివేట్ చేయబడింది',
+    'account.deactivate.success' => 'ఖాతా విజయవంతంగా డీయాక్టివేట్ చేయబడింది',
+
+    'account.lock.failure' => 'ఖాతాను లాక్ చేయలేకపోయింది',
+    'account.unlock.failure' => 'ఖాతాను అన్‌లాక్ చేయలేకపోయింది',
+    'account.suspend.failure' => 'ఖాతాను సస్పెండ్ చేయలేకపోయింది',
+    'account.activate.failure' => 'ఖాతాను యాక్టివేట్ చేయలేకపోయింది',
+    'account.deactivate.failure' => 'ఖాతాను డీయాక్టివేట్ చేయలేకపోయింది',
+    'account.history.failure' => 'స్థితి చరిత్రను పొందలేకపోయింది',
+    'account.access.failure' => 'ఖాతా యాక్సెస్‌ను తనిఖీ చేయలేకపోయింది',
+    'account.identifiers.failure' => 'యూజర్ గుర్తింపులను పొందలేకపోయింది',
+];

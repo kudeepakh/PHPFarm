@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'El módulo de usuario está en funcionamiento',
+    'user.id_missing' => 'Se requiere el ID de usuario',
+    'user.profile.retrieved' => 'Perfil de usuario obtenido correctamente',
+    'user.profile.failed' => 'No se pudo obtener el perfil de usuario',
+    'user.profile.updated' => 'Perfil de usuario actualizado correctamente',
+    'user.profile.update_failed' => 'No se pudo actualizar el perfil de usuario',
+    'user.list.retrieved' => 'Usuarios obtenidos correctamente',
+    'user.list.failed' => 'No se pudieron obtener los usuarios',
+    'user.delete.success' => 'Usuario eliminado correctamente',
+    'user.delete.failed' => 'No se pudo eliminar el usuario',
+    'user.not_found' => 'Usuario no encontrado',
+
+    'verification.token_required' => 'Se requiere el token de verificación',
+    'verification.email.success' => 'Correo verificado correctamente',
+    'verification.email.resent' => 'Correo de verificación reenviado',
+    'verification.status.failed' => 'No se pudo obtener el estado de verificación',
+    'verification.phone.required' => 'Se requiere el número de teléfono',
+    'verification.phone.otp_sent' => 'OTP enviado al teléfono',
+    'verification.phone.otp_failed' => 'No se pudo enviar el OTP al teléfono',
+    'verification.phone.otp_required' => 'Se requiere el OTP del teléfono',
+    'verification.phone.success' => 'Teléfono verificado correctamente',
+    'verification.phone.verify_failed' => 'No se pudo verificar el teléfono',
+
+    'account.lock.reason.default' => 'Bloqueado por el administrador',
+    'account.lock.success' => 'Cuenta bloqueada correctamente',
+    'account.unlock.success' => 'Cuenta desbloqueada correctamente',
+    'account.suspend.reason.default' => 'Suspendido por el administrador',
+    'account.suspend.success' => 'Cuenta suspendida correctamente',
+    'account.activate.success' => 'Cuenta activada correctamente',
+    'account.deactivate.success' => 'Cuenta desactivada correctamente',
+
+    'account.lock.failure' => 'No se pudo bloquear la cuenta',
+    'account.unlock.failure' => 'No se pudo desbloquear la cuenta',
+    'account.suspend.failure' => 'No se pudo suspender la cuenta',
+    'account.activate.failure' => 'No se pudo activar la cuenta',
+    'account.deactivate.failure' => 'No se pudo desactivar la cuenta',
+    'account.history.failure' => 'No se pudo obtener el historial de estado',
+    'account.access.failure' => 'No se pudo comprobar el acceso a la cuenta',
+    'account.identifiers.failure' => 'No se pudieron obtener los identificadores del usuario',
+];

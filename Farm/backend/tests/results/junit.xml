@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="CLI Arguments" tests="4" assertions="49" errors="0" failures="0" skipped="0" time="72.104721">
+    <testsuite name="Farm\Backend\Tests\Integration\HttpEndToEndTest" file="/var/www/html/tests/Integration/HttpEndToEndTest.php" tests="3" assertions="44" errors="0" failures="0" skipped="0" time="68.472702">
+      <testcase name="it_serves_public_health_and_docs_endpoints" file="/var/www/html/tests/Integration/HttpEndToEndTest.php" line="64" class="Farm\Backend\Tests\Integration\HttpEndToEndTest" classname="Farm.Backend.Tests.Integration.HttpEndToEndTest" assertions="20" time="39.029869"/>
+      <testcase name="it_registers_and_logs_in_user" file="/var/www/html/tests/Integration/HttpEndToEndTest.php" line="89" class="Farm\Backend\Tests\Integration\HttpEndToEndTest" classname="Farm.Backend.Tests.Integration.HttpEndToEndTest" assertions="8" time="10.470390"/>
+      <testcase name="it_enforces_auth_on_admin_and_account_routes" file="/var/www/html/tests/Integration/HttpEndToEndTest.php" line="111" class="Farm\Backend\Tests\Integration\HttpEndToEndTest" classname="Farm.Backend.Tests.Integration.HttpEndToEndTest" assertions="16" time="18.972443"/>
+    </testsuite>
+    <testsuite name="Farm\Backend\Tests\Integration\LoggingIntegrationTest" file="/var/www/html/tests/Integration/LoggingIntegrationTest.php" tests="1" assertions="5" errors="0" failures="0" skipped="0" time="3.632019">
+      <testcase name="it_logs_api_status_request_to_mongodb" file="/var/www/html/tests/Integration/LoggingIntegrationTest.php" line="67" class="Farm\Backend\Tests\Integration\LoggingIntegrationTest" classname="Farm.Backend.Tests.Integration.LoggingIntegrationTest" assertions="5" time="3.632019"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

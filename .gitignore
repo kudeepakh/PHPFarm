@@ -1,0 +1,16 @@
+# ====================
+# PHPFrarm Root .gitignore
+# ====================
+
+# Only include the Farm/ directory
+# Exclude all other directories at root
+/argon-dashboard-tailwind-1.0.1/
+
+# IDE & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log

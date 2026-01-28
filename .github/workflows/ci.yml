@@ -1,0 +1,212 @@
+name: CI - Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-backend:
+    name: Backend Tests (PHP 8.2)
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: phpfrarm_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+
+      redis:
+        image: redis:7.0
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql, mongodb, redis
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        working-directory: ./Farm/backend
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Copy environment file
+        working-directory: ./Farm/backend
+        run: cp .env.example .env
+
+      - name: Run database migrations
+        working-directory: ./Farm/backend
+        run: php artisan migrate --force || true
+
+      - name: Run tests
+        working-directory: ./Farm/backend
+        run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./Farm/backend/coverage.xml
+          flags: backend
+
+  test-frontend:
+    name: Frontend Tests (Node 20)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./Farm/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./Farm/frontend
+        run: npm ci
+
+      - name: Run linter
+        working-directory: ./Farm/frontend
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: ./Farm/frontend
+        run: npm test -- --coverage
+
+      - name: Build
+        working-directory: ./Farm/frontend
+        run: npm run build
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./Farm/frontend/coverage/clover.xml
+          flags: frontend
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpcs, phpstan
+
+      - name: Install dependencies
+        working-directory: ./Farm/backend
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Check PHP code style
+        working-directory: ./Farm/backend
+        run: vendor/bin/phpcs --standard=PSR12 app/ modules/
+
+      - name: Run PHPStan
+        working-directory: ./Farm/backend
+        run: vendor/bin/phpstan analyse app/ modules/ --level=5 || true
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        working-directory: ./Farm/backend
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run security audit
+        working-directory: ./Farm/backend
+        run: composer audit
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: ./Farm/frontend
+        run: npm ci
+
+      - name: Run npm audit
+        working-directory: ./Farm/frontend
+        run: npm audit --audit-level=moderate
+
+  docker:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Farm/backend
+          push: false
+          tags: phpfrarm-backend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Farm/frontend
+          push: false
+          tags: phpfrarm-frontend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test docker-compose
+        working-directory: ./Farm
+        run: |
+          cp .env.example .env
+          docker-compose config

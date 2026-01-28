@@ -1,0 +1,1055 @@
+{
+  "info": {
+    "_postman_id": "b1f8f5e4-9c0a-4b2a-bd8b-4caa5af2d1f1",
+    "name": "PHPFrarm API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const guid = pm.variables.replaceIn('{{$guid}}');",
+          "if (!pm.collectionVariables.get('correlationId')) pm.collectionVariables.set('correlationId', guid);",
+          "if (!pm.collectionVariables.get('transactionId')) pm.collectionVariables.set('transactionId', guid);",
+          "if (!pm.collectionVariables.get('requestId')) pm.collectionVariables.set('requestId', guid);"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8787" },
+    { "key": "authToken", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "correlationId", "value": "" },
+    { "key": "transactionId", "value": "" },
+    { "key": "requestId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "roleId", "value": "" },
+    { "key": "permissionId", "value": "" },
+    { "key": "category", "value": "media" },
+    { "key": "storagePath", "value": "" },
+    { "key": "operationName", "value": "" },
+    { "key": "service", "value": "" },
+    { "key": "identifier", "value": "user@example.com" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health - Basic",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/health"
+          }
+        },
+        {
+          "name": "Health - Ready",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/health/ready"
+          }
+        },
+        {
+          "name": "Health - Live",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/health/live"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{identifier}}\",\n  \"password\": \"SecurePassword123!\",\n  \"first_name\": \"Test\",\n  \"last_name\": \"User\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"password\": \"SecurePassword123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/login"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/logout"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/refresh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - OTP",
+      "item": [
+        {
+          "name": "Request OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"type\": \"email\",\n  \"purpose\": \"login\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/otp/request"
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"otp\": \"123456\",\n  \"purpose\": \"login\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/otp/verify"
+          }
+        },
+        {
+          "name": "Request Password Reset OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"type\": \"email\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/password/forgot"
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"type\": \"email\",\n  \"otp\": \"123456\",\n  \"new_password\": \"SecurePassword123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/password/reset"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/users/me"
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/users/profile"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Updated\",\n  \"last_name\": \"User\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/users/profile"
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=1&per_page=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/users/search?q=sample"
+          }
+        },
+        {
+          "name": "Admin - List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/users/admin/list"
+          }
+        },
+        {
+          "name": "Admin - Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/users/admin/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Roles",
+      "item": [
+        {
+          "name": "List Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/roles"
+          }
+        },
+        {
+          "name": "Get Role",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/roles/{{roleId}}"
+          }
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"custom_role\",\n  \"description\": \"Custom role\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/roles"
+          }
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated description\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/roles/{{roleId}}"
+          }
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/roles/{{roleId}}"
+          }
+        },
+        {
+          "name": "Assign Permission to Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/roles/{{roleId}}/permissions/{{permissionId}}"
+          }
+        },
+        {
+          "name": "Remove Permission from Role",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/roles/{{roleId}}/permissions/{{permissionId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Permissions",
+      "item": [
+        {
+          "name": "List Permissions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/permissions"
+          }
+        },
+        {
+          "name": "Get Permission",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/permissions/{{permissionId}}"
+          }
+        },
+        {
+          "name": "Create Permission",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"users:read\",\n  \"resource\": \"users\",\n  \"action\": \"read\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/permissions"
+          }
+        },
+        {
+          "name": "Update Permission",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated permission\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/permissions/{{permissionId}}"
+          }
+        },
+        {
+          "name": "Delete Permission",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/permissions/{{permissionId}}"
+          }
+        },
+        {
+          "name": "Get Permissions by Resource",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/permissions/resource/{{resource}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - User Roles",
+      "item": [
+        {
+          "name": "Get User Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users/{{userId}}/roles"
+          }
+        },
+        {
+          "name": "Assign Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users/{{userId}}/roles/{{roleId}}"
+          }
+        },
+        {
+          "name": "Remove Role",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users/{{userId}}/roles/{{roleId}}"
+          }
+        },
+        {
+          "name": "Bulk Assign Roles",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role_ids\": [\"{{roleId}}\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/users/{{userId}}/roles/bulk"
+          }
+        },
+        {
+          "name": "Sync Roles",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role_ids\": [\"{{roleId}}\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/admin/users/{{userId}}/roles/sync"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Resilience (Admin)",
+      "item": [
+        {
+          "name": "Retry Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/retry/stats"
+          }
+        },
+        {
+          "name": "Retry Stats (Operation)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/retry/stats/{{operationName}}"
+          }
+        },
+        {
+          "name": "Retry Stats Reset",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/retry/reset"
+          }
+        },
+        {
+          "name": "Circuit Breaker Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/circuit-breaker/status?service={{service}}"
+          }
+        },
+        {
+          "name": "Circuit Breaker Reset",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service\": \"{{service}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/admin/resilience/circuit-breaker/reset"
+          }
+        },
+        {
+          "name": "Circuit Breaker Force Open",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service\": \"{{service}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/admin/resilience/circuit-breaker/force-open"
+          }
+        },
+        {
+          "name": "Degradation Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/degradation/status?service={{service}}"
+          }
+        },
+        {
+          "name": "Enable Degradation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service\": \"{{service}}\",\n  \"reason\": \"manual\",\n  \"duration_seconds\": 300\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/admin/resilience/degradation/enable"
+          }
+        },
+        {
+          "name": "Disable Degradation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service\": \"{{service}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/admin/resilience/degradation/disable"
+          }
+        },
+        {
+          "name": "Degradation Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/degradation/stats/{{service}}"
+          }
+        },
+        {
+          "name": "Backpressure Usage",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/backpressure/usage?resource={{resource}}"
+          }
+        },
+        {
+          "name": "Backpressure Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/backpressure/stats?resource={{resource}}"
+          }
+        },
+        {
+          "name": "Update Backpressure Limits",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"{{resource}}\",\n  \"limit\": 100\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/admin/resilience/backpressure/limits"
+          }
+        },
+        {
+          "name": "Reset Backpressure",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/backpressure/reset"
+          }
+        },
+        {
+          "name": "Resilience Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/resilience/status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Storage",
+      "item": [
+        {
+          "name": "Storage Config",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/config"
+          }
+        },
+        {
+          "name": "Storage Public Config",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/public-config"
+          }
+        },
+        {
+          "name": "Upload File",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file" },
+                { "key": "category", "value": "media" },
+                { "key": "visibility", "value": "private" }
+              ]
+            },
+            "url": "{{baseUrl}}/api/v1/storage/upload"
+          }
+        },
+        {
+          "name": "Presigned Upload URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"example.png\",\n  \"category\": \"media\",\n  \"content_type\": \"image/png\",\n  \"expiration\": 900\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/storage/presigned-upload"
+          }
+        },
+        {
+          "name": "Presigned Download URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"path\": \"{{storagePath}}\",\n  \"category\": \"media\",\n  \"expiration\": 3600\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/storage/presigned-download"
+          }
+        },
+        {
+          "name": "List Files",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/list"
+          }
+        },
+        {
+          "name": "List Files (Category)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/list/{{category}}"
+          }
+        },
+        {
+          "name": "Get Metadata",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/metadata/{{category}}/{{storagePath}}"
+          }
+        },
+        {
+          "name": "Delete File",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "X-Correlation-Id", "value": "{{correlationId}}" },
+              { "key": "X-Transaction-Id", "value": "{{transactionId}}" },
+              { "key": "X-Request-Id", "value": "{{requestId}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/storage/{{category}}/{{storagePath}}"
+          }
+        }
+      ]
+    }
+  ]
+}

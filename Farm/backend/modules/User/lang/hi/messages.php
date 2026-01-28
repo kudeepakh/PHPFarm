@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'यूज़र मॉड्यूल चालू है',
+    'user.id_missing' => 'यूज़र आईडी आवश्यक है',
+    'user.profile.retrieved' => 'यूज़र प्रोफ़ाइल सफलतापूर्वक प्राप्त हुई',
+    'user.profile.failed' => 'यूज़र प्रोफ़ाइल प्राप्त करने में विफल',
+    'user.profile.updated' => 'यूज़र प्रोफ़ाइल सफलतापूर्वक अपडेट हुई',
+    'user.profile.update_failed' => 'यूज़र प्रोफ़ाइल अपडेट करने में विफल',
+    'user.list.retrieved' => 'यूज़र सूची सफलतापूर्वक प्राप्त हुई',
+    'user.list.failed' => 'यूज़र सूची प्राप्त करने में विफल',
+    'user.delete.success' => 'यूज़र सफलतापूर्वक हटाया गया',
+    'user.delete.failed' => 'यूज़र हटाने में विफल',
+    'user.not_found' => 'यूज़र नहीं मिला',
+
+    'verification.token_required' => 'वेरिफिकेशन टोकन आवश्यक है',
+    'verification.email.success' => 'ईमेल सफलतापूर्वक सत्यापित',
+    'verification.email.resent' => 'वेरिफिकेशन ईमेल पुनः भेजा गया',
+    'verification.status.failed' => 'वेरिफिकेशन स्थिति प्राप्त करने में विफल',
+    'verification.phone.required' => 'फोन नंबर आवश्यक है',
+    'verification.phone.otp_sent' => 'फोन पर OTP भेजा गया',
+    'verification.phone.otp_failed' => 'फोन OTP भेजने में विफल',
+    'verification.phone.otp_required' => 'फोन OTP आवश्यक है',
+    'verification.phone.success' => 'फोन सफलतापूर्वक सत्यापित',
+    'verification.phone.verify_failed' => 'फोन सत्यापन विफल',
+
+    'account.lock.reason.default' => 'एडमिन द्वारा लॉक',
+    'account.lock.success' => 'खाता सफलतापूर्वक लॉक किया गया',
+    'account.unlock.success' => 'खाता सफलतापूर्वक अनलॉक किया गया',
+    'account.suspend.reason.default' => 'एडमिन द्वारा निलंबित',
+    'account.suspend.success' => 'खाता सफलतापूर्वक निलंबित',
+    'account.activate.success' => 'खाता सफलतापूर्वक सक्रिय',
+    'account.deactivate.success' => 'खाता सफलतापूर्वक निष्क्रिय',
+
+    'account.lock.failure' => 'खाता लॉक करने में विफल',
+    'account.unlock.failure' => 'खाता अनलॉक करने में विफल',
+    'account.suspend.failure' => 'खाता निलंबित करने में विफल',
+    'account.activate.failure' => 'खाता सक्रिय करने में विफल',
+    'account.deactivate.failure' => 'खाता निष्क्रिय करने में विफल',
+    'account.history.failure' => 'स्थिति इतिहास प्राप्त करने में विफल',
+    'account.access.failure' => 'खाता पहुँच जांचने में विफल',
+    'account.identifiers.failure' => 'यूज़र पहचानकर्ता प्राप्त करने में विफल',
+];

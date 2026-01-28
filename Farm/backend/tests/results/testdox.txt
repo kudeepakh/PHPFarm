@@ -1,0 +1,8 @@
+Http End To End (Farm\Backend\Tests\Integration\HttpEndToEnd)
+ [x] It serves public health and docs endpoints
+ [x] It registers and logs in user
+ [x] It enforces auth on admin and account routes
+
+Logging Integration (Farm\Backend\Tests\Integration\LoggingIntegration)
+ [x] It logs api status request to mongodb
+

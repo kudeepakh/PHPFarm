@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'ইউজার মডিউল চলছে',
+    'user.id_missing' => 'ইউজার আইডি প্রয়োজন',
+    'user.profile.retrieved' => 'ইউজার প্রোফাইল পাওয়া গেছে',
+    'user.profile.failed' => 'ইউজার প্রোফাইল পাওয়া যায়নি',
+    'user.profile.updated' => 'ইউজার প্রোফাইল আপডেট হয়েছে',
+    'user.profile.update_failed' => 'ইউজার প্রোফাইল আপডেট ব্যর্থ',
+    'user.list.retrieved' => 'ইউজার তালিকা পাওয়া গেছে',
+    'user.list.failed' => 'ইউজার তালিকা পাওয়া যায়নি',
+    'user.delete.success' => 'ইউজার মুছে ফেলা হয়েছে',
+    'user.delete.failed' => 'ইউজার মুছে ফেলতে ব্যর্থ',
+    'user.not_found' => 'ইউজার পাওয়া যায়নি',
+
+    'verification.token_required' => 'ভেরিফিকেশন টোকেন প্রয়োজন',
+    'verification.email.success' => 'ইমেইল সফলভাবে যাচাই হয়েছে',
+    'verification.email.resent' => 'ভেরিফিকেশন ইমেইল পুনরায় পাঠানো হয়েছে',
+    'verification.status.failed' => 'ভেরিফিকেশন স্ট্যাটাস পাওয়া যায়নি',
+    'verification.phone.required' => 'ফোন নম্বর প্রয়োজন',
+    'verification.phone.otp_sent' => 'ফোনে OTP পাঠানো হয়েছে',
+    'verification.phone.otp_failed' => 'ফোনে OTP পাঠাতে ব্যর্থ',
+    'verification.phone.otp_required' => 'ফোন OTP প্রয়োজন',
+    'verification.phone.success' => 'ফোন সফলভাবে যাচাই হয়েছে',
+    'verification.phone.verify_failed' => 'ফোন যাচাই ব্যর্থ',
+
+    'account.lock.reason.default' => 'অ্যাডমিন দ্বারা লক করা হয়েছে',
+    'account.lock.success' => 'অ্যাকাউন্ট সফলভাবে লক হয়েছে',
+    'account.unlock.success' => 'অ্যাকাউন্ট সফলভাবে আনলক হয়েছে',
+    'account.suspend.reason.default' => 'অ্যাডমিন দ্বারা স্থগিত করা হয়েছে',
+    'account.suspend.success' => 'অ্যাকাউন্ট সফলভাবে স্থগিত হয়েছে',
+    'account.activate.success' => 'অ্যাকাউন্ট সফলভাবে সক্রিয় হয়েছে',
+    'account.deactivate.success' => 'অ্যাকাউন্ট সফলভাবে নিষ্ক্রিয় হয়েছে',
+
+    'account.lock.failure' => 'অ্যাকাউন্ট লক করতে ব্যর্থ',
+    'account.unlock.failure' => 'অ্যাকাউন্ট আনলক করতে ব্যর্থ',
+    'account.suspend.failure' => 'অ্যাকাউন্ট স্থগিত করতে ব্যর্থ',
+    'account.activate.failure' => 'অ্যাকাউন্ট সক্রিয় করতে ব্যর্থ',
+    'account.deactivate.failure' => 'অ্যাকাউন্ট নিষ্ক্রিয় করতে ব্যর্থ',
+    'account.history.failure' => 'স্ট্যাটাস ইতিহাস পাওয়া যায়নি',
+    'account.access.failure' => 'অ্যাকাউন্ট অ্যাক্সেস যাচাই ব্যর্থ',
+    'account.identifiers.failure' => 'ইউজার আইডেন্টিফায়ার পাওয়া যায়নি',
+];

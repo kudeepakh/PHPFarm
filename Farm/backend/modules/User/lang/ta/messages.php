@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'பயனர் மொட்யூல் இயங்குகிறது',
+    'user.id_missing' => 'பயனர் ஐடி தேவை',
+    'user.profile.retrieved' => 'பயனர் சுயவிவரம் பெறப்பட்டது',
+    'user.profile.failed' => 'பயனர் சுயவிவரம் பெற முடியவில்லை',
+    'user.profile.updated' => 'பயனர் சுயவிவரம் புதுப்பிக்கப்பட்டது',
+    'user.profile.update_failed' => 'பயனர் சுயவிவரம் புதுப்பிக்க முடியவில்லை',
+    'user.list.retrieved' => 'பயனர் பட்டியல் பெறப்பட்டது',
+    'user.list.failed' => 'பயனர் பட்டியல் பெற முடியவில்லை',
+    'user.delete.success' => 'பயனர் நீக்கப்பட்டது',
+    'user.delete.failed' => 'பயனர் நீக்க முடியவில்லை',
+    'user.not_found' => 'பயனர் காணவில்லை',
+
+    'verification.token_required' => 'சரிபார்ப்பு டோக்கன் தேவை',
+    'verification.email.success' => 'மின்னஞ்சல் சரிபார்க்கப்பட்டது',
+    'verification.email.resent' => 'சரிபார்ப்பு மின்னஞ்சல் மீண்டும் அனுப்பப்பட்டது',
+    'verification.status.failed' => 'சரிபார்ப்பு நிலை பெற முடியவில்லை',
+    'verification.phone.required' => 'தொலைபேசி எண் தேவை',
+    'verification.phone.otp_sent' => 'தொலைபேசிக்கு OTP அனுப்பப்பட்டது',
+    'verification.phone.otp_failed' => 'தொலைபேசி OTP அனுப்ப முடியவில்லை',
+    'verification.phone.otp_required' => 'தொலைபேசி OTP தேவை',
+    'verification.phone.success' => 'தொலைபேசி சரிபார்க்கப்பட்டது',
+    'verification.phone.verify_failed' => 'தொலைபேசி சரிபார்ப்பு தோல்வி',
+
+    'account.lock.reason.default' => 'நிர்வாகத்தால் பூட்டப்பட்டது',
+    'account.lock.success' => 'கணக்கு வெற்றிகரமாக பூட்டப்பட்டது',
+    'account.unlock.success' => 'கணக்கு திறக்கப்பட்டது',
+    'account.suspend.reason.default' => 'நிர்வாகத்தால் இடைநிறுத்தப்பட்டது',
+    'account.suspend.success' => 'கணக்கு இடைநிறுத்தப்பட்டது',
+    'account.activate.success' => 'கணக்கு செயல்படுத்தப்பட்டது',
+    'account.deactivate.success' => 'கணக்கு செயலிழக்கப்பட்டது',
+
+    'account.lock.failure' => 'கணக்கை பூட்ட முடியவில்லை',
+    'account.unlock.failure' => 'கணக்கை திறக்க முடியவில்லை',
+    'account.suspend.failure' => 'கணக்கை இடைநிறுத்த முடியவில்லை',
+    'account.activate.failure' => 'கணக்கை செயல்படுத்த முடியவில்லை',
+    'account.deactivate.failure' => 'கணக்கை செயலிழக்க முடியவில்லை',
+    'account.history.failure' => 'நிலை வரலாற்றை பெற முடியவில்லை',
+    'account.access.failure' => 'கணக்கு அணுகலை சரிபார்க்க முடியவில்லை',
+    'account.identifiers.failure' => 'பயனர் அடையாளங்களை பெற முடியவில்லை',
+];

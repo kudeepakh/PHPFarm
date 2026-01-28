@@ -1,0 +1,69 @@
+﻿{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "PHPFrarm API",
+        "description": "Enterprise-grade API development framework with built-in security, observability, and governance.",
+        "version": "1.0.0",
+        "contact": {
+            "name": "API Team",
+            "email": "api@example.com",
+            "url": "https://example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "Development server"
+        },
+        {
+            "url": "https://staging-api.example.com/api/v1",
+            "description": "Staging server"
+        },
+        {
+            "url": "https://api.example.com/api/v1",
+            "description": "Production server"
+        }
+    ],
+    "paths": [],
+    "components": {
+        "schemas": [],
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "apiKey": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-API-Key"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "User authentication and token management"
+        },
+        {
+            "name": "Users",
+            "description": "User management operations"
+        },
+        {
+            "name": "Admin",
+            "description": "Administrative operations"
+        },
+        {
+            "name": "Public",
+            "description": "Publicly accessible endpoints"
+        },
+        {
+            "name": "Internal",
+            "description": "Internal API endpoints"
+        }
+    ]
+}

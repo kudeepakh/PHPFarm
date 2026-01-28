@@ -1,0 +1,283 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * PHPFrarm Artisan CLI
+ * 
+ * Command-line interface for PHPFrarm framework.
+ * 
+ * Usage:
+ *   php artisan <command> [options] [arguments]
+ * 
+ * Available Commands:
+ *   make:module <name>    Create a new module
+ *   migrate               Run database migrations
+ *   migrate --status      Show migration status
+ *   migrate --rollback    Rollback last migration
+ *   docs:generate         Generate API documentation
+ * 
+ * @package PHPFrarm
+ */
+
+// Load CLI bootstrap (autoloader, env, helpers)
+require_once __DIR__ . '/app/bootstrap/cli.php';
+
+// Parse command
+$command = $argv[1] ?? null;
+$args = array_slice($argv, 2);
+
+if (!$command) {
+    showHelp();
+    exit(0);
+}
+
+// Route to appropriate command handler
+switch ($command) {
+    case 'make:module':
+        $exitCode = runCommand(
+            Farm\Backend\App\Console\Commands\MakeModuleCommand::class,
+            $args
+        );
+        break;
+        
+    case 'migrate':
+        $exitCode = runCommand(
+            Farm\Backend\App\Console\Commands\MigrateCommand::class,
+            $args
+        );
+        break;
+        
+    case 'docs:generate':
+        $exitCode = runCommand(
+            Farm\Backend\App\Console\Commands\GenerateDocsCommand::class,
+            $args
+        );
+        break;
+
+    case 'queue:work':
+        $exitCode = runQueueWorker($args);
+        break;
+
+    case 'queue:stats':
+        $exitCode = showQueueStats();
+        break;
+        
+    case 'help':
+    case '--help':
+    case '-h':
+        showHelp();
+        $exitCode = 0;
+        break;
+        
+    case 'version':
+    case '--version':
+    case '-v':
+        echo "PHPFrarm Framework v1.0.0\n";
+        $exitCode = 0;
+        break;
+        
+    case 'list':
+        showCommands();
+        $exitCode = 0;
+        break;
+        
+    default:
+        echo "❌ Unknown command: {$command}\n";
+        echo "Run 'php artisan list' to see available commands.\n";
+        $exitCode = 1;
+}
+
+exit($exitCode);
+
+/**
+ * Run a command class
+ */
+function runCommand(string $class, array $args): int
+{
+    if (!class_exists($class)) {
+        echo "❌ Command class not found: {$class}\n";
+        return 1;
+    }
+    
+    try {
+        $command = new $class();
+        return $command->execute($args);
+    } catch (Throwable $e) {
+        echo "❌ Command failed: {$e->getMessage()}\n";
+        if (($_ENV['APP_DEBUG'] ?? false) === 'true') {
+            echo "\n{$e->getTraceAsString()}\n";
+        }
+        return 1;
+    }
+}
+
+/**
+ * Show help message
+ */
+function showHelp(): void
+{
+    echo <<<HELP
+╔═══════════════════════════════════════════════════════════════╗
+║                  PHPFrarm Framework CLI                       ║
+╚═══════════════════════════════════════════════════════════════╝
+
+Usage:
+  php artisan <command> [options] [arguments]
+
+Global Options:
+  -h, --help       Display help for the command
+  -v, --version    Display the framework version
+  --verbose        Increase verbosity of messages
+
+Run 'php artisan list' to see available commands.
+Run 'php artisan <command> --help' for command-specific help.
+
+
+HELP;
+}
+
+/**
+ * Show available commands
+ */
+function showCommands(): void
+{
+    echo <<<COMMANDS
+Available Commands:
+
+  📦 Module Management:
+    make:module <name>              Create a new module with all components
+      Options:
+        --with-api                  Include API controller
+        --with-crud                 Include CRUD operations
+        --with-mongo                Include MongoDB indexes
+        --with-tests                Generate test files
+        --full                      Include all components
+
+  🗄️  Database:
+    migrate                         Run pending database migrations
+      Options:
+        --status                    Show migration status
+        --rollback[=N]              Rollback last N migrations (default: 1)
+        --refresh                   Rollback all and re-run migrations
+        --fresh                     Drop all tables and re-run migrations
+        --seed                      Run database seeders after migrating
+
+  📚 Documentation:
+    docs:generate                   Generate API documentation
+      Options:
+        --format=<type>             Output format: openapi, errors, postman, all
+        --output=<path>             Custom output directory
+
+  🔄 Queue:
+    queue:work                      Start the queue worker to process jobs
+      Options:
+        --max-jobs=<N>              Stop after processing N jobs
+        --max-time=<S>              Stop after S seconds
+        --sleep=<S>                 Seconds to sleep when no jobs (default: 3)
+        --once                      Process a single job and exit
+    queue:stats                     Show queue statistics
+
+  ℹ️  Info:
+    list                            Show this command list
+    help                            Show help message
+    version                         Show framework version
+
+Examples:
+  php artisan make:module Blog --full
+  php artisan migrate --status
+  php artisan docs:generate --format=openapi
+  php artisan queue:work --max-jobs=100
+
+
+COMMANDS;
+}
+
+/**
+ * Run the queue worker
+ */
+function runQueueWorker(array $args): int
+{
+    require_once __DIR__ . '/app/Core/Queue/JobInterface.php';
+    require_once __DIR__ . '/app/Core/Queue/Job.php';
+    require_once __DIR__ . '/app/Core/Queue/JobQueue.php';
+    require_once __DIR__ . '/app/Core/Queue/Worker.php';
+    require_once __DIR__ . '/app/Core/Queue/Jobs/SendVerificationEmailJob.php';
+
+    $options = [
+        'max_jobs' => 0,
+        'max_time' => 0,
+        'sleep' => 3,
+    ];
+
+    $once = false;
+
+    // Parse arguments
+    foreach ($args as $arg) {
+        if (str_starts_with($arg, '--max-jobs=')) {
+            $options['max_jobs'] = (int)substr($arg, 11);
+        } elseif (str_starts_with($arg, '--max-time=')) {
+            $options['max_time'] = (int)substr($arg, 11);
+        } elseif (str_starts_with($arg, '--sleep=')) {
+            $options['sleep'] = (int)substr($arg, 8);
+        } elseif ($arg === '--once') {
+            $once = true;
+        }
+    }
+
+    echo "🔄 Starting queue worker...\n";
+
+    try {
+        $worker = new \PHPFrarm\Core\Queue\Worker();
+
+        if ($once) {
+            $processed = $worker->runOnce();
+            if ($processed) {
+                echo "✅ Processed one job\n";
+            } else {
+                echo "ℹ️  No jobs in queue\n";
+            }
+            return 0;
+        }
+
+        $worker->run($options);
+        return 0;
+    } catch (Throwable $e) {
+        echo "❌ Queue worker failed: {$e->getMessage()}\n";
+        return 1;
+    }
+}
+
+/**
+ * Show queue statistics
+ */
+function showQueueStats(): int
+{
+    require_once __DIR__ . '/app/Core/Queue/JobInterface.php';
+    require_once __DIR__ . '/app/Core/Queue/Job.php';
+    require_once __DIR__ . '/app/Core/Queue/JobQueue.php';
+
+    try {
+        $queue = \PHPFrarm\Core\Queue\JobQueue::getInstance();
+        $stats = $queue->getStats();
+
+        if (!$stats['available']) {
+            echo "❌ Queue is not available (Redis not connected)\n";
+            return 1;
+        }
+
+        echo "\n📊 Queue Statistics\n";
+        echo "═══════════════════════════════════════\n";
+        echo "  High Priority:  {$stats['high_priority']} jobs\n";
+        echo "  Default:        {$stats['default']} jobs\n";
+        echo "  Low Priority:   {$stats['low_priority']} jobs\n";
+        echo "  Delayed:        {$stats['delayed']} jobs\n";
+        echo "  Processing:     {$stats['processing']} jobs\n";
+        echo "  Failed:         {$stats['failed']} jobs\n";
+        echo "═══════════════════════════════════════\n\n";
+
+        return 0;
+    } catch (Throwable $e) {
+        echo "❌ Failed to get queue stats: {$e->getMessage()}\n";
+        return 1;
+    }
+}

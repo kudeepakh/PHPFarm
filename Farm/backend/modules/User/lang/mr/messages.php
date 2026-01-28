@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'user.module.running' => 'यूजर मॉड्यूल चालू आहे',
+    'user.id_missing' => 'यूजर आयडी आवश्यक आहे',
+    'user.profile.retrieved' => 'यूजर प्रोफाइल मिळाले',
+    'user.profile.failed' => 'यूजर प्रोफाइल मिळविण्यात अयशस्वी',
+    'user.profile.updated' => 'यूजर प्रोफाइल अद्ययावत झाले',
+    'user.profile.update_failed' => 'यूजर प्रोफाइल अद्ययावत करण्यात अयशस्वी',
+    'user.list.retrieved' => 'यूजर यादी मिळाली',
+    'user.list.failed' => 'यूजर यादी मिळविण्यात अयशस्वी',
+    'user.delete.success' => 'यूजर हटवला',
+    'user.delete.failed' => 'यूजर हटवण्यात अयशस्वी',
+    'user.not_found' => 'यूजर सापडला नाही',
+
+    'verification.token_required' => 'व्हेरिफिकेशन टोकन आवश्यक आहे',
+    'verification.email.success' => 'ईमेल यशस्वीपणे सत्यापित',
+    'verification.email.resent' => 'व्हेरिफिकेशन ईमेल पुन्हा पाठवला',
+    'verification.status.failed' => 'व्हेरिफिकेशन स्थिती मिळविण्यात अयशस्वी',
+    'verification.phone.required' => 'फोन नंबर आवश्यक आहे',
+    'verification.phone.otp_sent' => 'फोनवर OTP पाठवला',
+    'verification.phone.otp_failed' => 'फोन OTP पाठवण्यात अयशस्वी',
+    'verification.phone.otp_required' => 'फोन OTP आवश्यक आहे',
+    'verification.phone.success' => 'फोन यशस्वीपणे सत्यापित',
+    'verification.phone.verify_failed' => 'फोन सत्यापन अयशस्वी',
+
+    'account.lock.reason.default' => 'अॅडमिनने लॉक केले',
+    'account.lock.success' => 'खाते यशस्वीपणे लॉक झाले',
+    'account.unlock.success' => 'खाते यशस्वीपणे अनलॉक झाले',
+    'account.suspend.reason.default' => 'अॅडमिनने स्थगित केले',
+    'account.suspend.success' => 'खाते यशस्वीपणे स्थगित झाले',
+    'account.activate.success' => 'खाते यशस्वीपणे सक्रिय झाले',
+    'account.deactivate.success' => 'खाते यशस्वीपणे निष्क्रिय झाले',
+
+    'account.lock.failure' => 'खाते लॉक करण्यात अयशस्वी',
+    'account.unlock.failure' => 'खाते अनलॉक करण्यात अयशस्वी',
+    'account.suspend.failure' => 'खाते स्थगित करण्यात अयशस्वी',
+    'account.activate.failure' => 'खाते सक्रिय करण्यात अयशस्वी',
+    'account.deactivate.failure' => 'खाते निष्क्रिय करण्यात अयशस्वी',
+    'account.history.failure' => 'स्थिती इतिहास मिळविण्यात अयशस्वी',
+    'account.access.failure' => 'खाते प्रवेश तपासण्यात अयशस्वी',
+    'account.identifiers.failure' => 'यूजर ओळख मिळविण्यात अयशस्वी',
+];

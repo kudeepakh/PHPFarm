@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHPFrarm Log Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .controls {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        select, input {
+            padding: 10px;
+            background: #3a3a3a;
+            border: 1px solid #4a4a4a;
+            border-radius: 5px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #3a3a3a;
+            color: #e0e0e0;
+        }
+        
+        .btn-secondary:hover {
+            background: #4a4a4a;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .logs-container {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .log-entry {
+            background: #333;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .log-entry:hover {
+            background: #3a3a3a;
+            transform: translateX(5px);
+        }
+        
+        .log-entry.error {
+            border-left-color: #ef4444;
+        }
+        
+        .log-entry.warning {
+            border-left-color: #f59e0b;
+        }
+        
+        .log-entry.info {
+            border-left-color: #3b82f6;
+        }
+        
+        .log-entry.debug {
+            border-left-color: #6b7280;
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .log-level {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .log-level.error {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .log-level.warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .log-level.info {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .log-level.debug {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .log-timestamp {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        .log-message {
+            font-size: 1em;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .log-details {
+            display: none;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .log-entry.expanded .log-details {
+            display: block;
+        }
+        
+        .detail-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        
+        .detail-label {
+            color: #a0a0a0;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: #e0e0e0;
+            word-break: break-all;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a0a0a0;
+        }
+        
+        .error-message {
+            background: #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .no-logs {
+            text-align: center;
+            padding: 40px;
+            color: #a0a0a0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 PHPFrarm Log Viewer</h1>
+            <p class="subtitle">Real-time monitoring and analysis of application logs</p>
+        </header>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-label">Application Logs</div>
+                <div class="stat-value" id="stat-app">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Errors (24h)</div>
+                <div class="stat-value" style="color: #ef4444" id="stat-errors">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Warnings (24h)</div>
+                <div class="stat-value" style="color: #f59e0b" id="stat-warnings">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Last Hour Activity</div>
+                <div class="stat-value" style="color: #3b82f6" id="stat-activity">-</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Collection</label>
+                    <select id="collection">
+                        <option value="application">Application Logs</option>
+                        <option value="access">Access Logs</option>
+                        <option value="security">Security Logs</option>
+                        <option value="audit">Audit Logs</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Log Level</label>
+                    <select id="level">
+                        <option value="">All Levels</option>
+                        <option value="ERROR">ERROR</option>
+                        <option value="WARNING">WARNING</option>
+                        <option value="INFO">INFO</option>
+                        <option value="DEBUG">DEBUG</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Start Date</label>
+                    <input type="datetime-local" id="startDate">
+                </div>
+                
+                <div class="control-group">
+                    <label>End Date</label>
+                    <input type="datetime-local" id="endDate">
+                </div>
+            </div>
+            
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Search Message</label>
+                    <input type="text" id="search" placeholder="Search in log messages...">
+                </div>
+                
+                <div class="control-group">
+                    <label>Correlation ID</label>
+                    <input type="text" id="correlationId" placeholder="Filter by correlation ID...">
+                </div>
+                
+                <div class="control-group">
+                    <label>Per Page</label>
+                    <select id="perPage">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="loadLogs()">🔍 Search Logs</button>
+                <button class="btn-secondary" onclick="clearFilters()">🔄 Clear Filters</button>
+                <button class="btn-secondary" onclick="loadStatistics()">📊 Refresh Stats</button>
+            </div>
+        </div>
+        
+        <div id="errorContainer"></div>
+        
+        <div class="logs-container">
+            <div id="logsContent">
+                <div class="loading">Loading logs...</div>
+            </div>
+            
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = '/api/v1/logs';
+        let currentPage = 1;
+        
+        // Load statistics on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStatistics();
+            loadLogs();
+        });
+        
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('stat-app').textContent = 
+                        formatNumber(data.data.collections.application_logs);
+                    document.getElementById('stat-errors').textContent = 
+                        formatNumber(data.data.log_levels.ERROR || 0);
+                    document.getElementById('stat-warnings').textContent = 
+                        formatNumber(data.data.log_levels.WARNING || 0);
+                    document.getElementById('stat-activity').textContent = 
+                        formatNumber(data.data.recent_activity.last_hour);
+                }
+            } catch (error) {
+                console.error('Failed to load statistics:', error);
+            }
+        }
+        
+        async function loadLogs(page = 1) {
+            currentPage = page;
+            const collection = document.getElementById('collection').value;
+            const level = document.getElementById('level').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const search = document.getElementById('search').value;
+            const correlationId = document.getElementById('correlationId').value;
+            const perPage = document.getElementById('perPage').value;
+            
+            const params = new URLSearchParams({
+                page: page,
+                per_page: perPage
+            });
+            
+            if (level) params.append('level', level);
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+            if (search) params.append('search', search);
+            if (correlationId) params.append('correlation_id', correlationId);
+            
+            document.getElementById('logsContent').innerHTML = '<div class="loading">Loading logs...</div>';
+            document.getElementById('errorContainer').innerHTML = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/${collection}?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderLogs(data.data);
+                    renderPagination(data.pagination);
+                } else {
+                    showError(data.error.message);
+                }
+            } catch (error) {
+                showError('Failed to load logs: ' + error.message);
+            }
+        }
+        
+        function renderLogs(logs) {
+            const container = document.getElementById('logsContent');
+            
+            if (logs.length === 0) {
+                container.innerHTML = '<div class="no-logs">No logs found matching your criteria</div>';
+                return;
+            }
+            
+            container.innerHTML = logs.map(log => {
+                const timestamp = new Date(log.timestamp.$date).toLocaleString();
+                const level = (log.level || 'INFO').toLowerCase();
+                
+                return `
+                    <div class="log-entry ${level}" onclick="toggleDetails(this)">
+                        <div class="log-header">
+                            <span class="log-level ${level}">${log.level}</span>
+                            <span class="log-timestamp">${timestamp}</span>
+                        </div>
+                        <div class="log-message">${escapeHtml(log.message)}</div>
+                        <div class="log-details">
+                            ${log.correlation_id ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Correlation ID</div>
+                                    <div class="detail-value">${log.correlation_id}</div>
+                                </div>
+                            ` : ''}
+                            ${log.transaction_id ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Transaction ID</div>
+                                    <div class="detail-value">${log.transaction_id}</div>
+                                </div>
+                            ` : ''}
+                            ${log.request_id ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Request ID</div>
+                                    <div class="detail-value">${log.request_id}</div>
+                                </div>
+                            ` : ''}
+                            ${log.server ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Endpoint</div>
+                                    <div class="detail-value">${log.server.method} ${log.server.uri}</div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">IP Address</div>
+                                    <div class="detail-value">${log.server.ip}</div>
+                                </div>
+                            ` : ''}
+                            ${log.context ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Context</div>
+                                    <div class="detail-value"><pre>${JSON.stringify(log.context, null, 2)}</pre></div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderPagination(pagination) {
+            const container = document.getElementById('pagination');
+            
+            if (pagination.total_pages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            if (pagination.has_prev) {
+                html += `<button class="btn-secondary" onclick="loadLogs(${pagination.current_page - 1})">← Previous</button>`;
+            }
+            
+            html += `<span style="color: #a0a0a0">Page ${pagination.current_page} of ${pagination.total_pages} (${formatNumber(pagination.total)} logs)</span>`;
+            
+            if (pagination.has_next) {
+                html += `<button class="btn-secondary" onclick="loadLogs(${pagination.current_page + 1})">Next →</button>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function toggleDetails(element) {
+            element.classList.toggle('expanded');
+        }
+        
+        function clearFilters() {
+            document.getElementById('level').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('search').value = '';
+            document.getElementById('correlationId').value = '';
+            loadLogs();
+        }
+        
+        function showError(message) {
+            document.getElementById('errorContainer').innerHTML = 
+                `<div class="error-message">❌ ${escapeHtml(message)}</div>`;
+        }
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat().format(num);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

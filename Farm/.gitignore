@@ -1,0 +1,139 @@
+# ====================
+# Environment Files
+# ====================
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+backend/.env
+frontend/.env
+
+# ====================
+# Dependencies
+# ====================
+backend/vendor/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.js
+
+# ====================
+# Logs & Debug
+# ====================
+backend/logs/*.log
+backend/logs/*.txt
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ====================
+# Database
+# ====================
+*.sql.bak
+*.sql.tmp
+backend/database/backups/
+*.dump
+
+# ====================
+# OS Files
+# ====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+*~
+
+# ====================
+# IDE & Editors
+# ====================
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*.swn
+*.bak
+nbproject/
+.vscode-test/
+
+# ====================
+# Docker
+# ====================
+.docker/
+docker-compose.override.yml
+
+# ====================
+# Build & Cache
+# ====================
+backend/.phpunit.cache/
+backend/bootstrap/cache/
+frontend/coverage/
+backend/coverage/
+.cache/
+.temp/
+tmp/
+temp/
+
+# ====================
+# Testing & Debug Scripts
+# ====================
+# PowerShell test scripts (keep for contributors)
+# test_*.ps1
+# *.ps1
+
+# Temporary test files
+*.test.php
+*.debug.php
+test_output.txt
+debug_output.txt
+
+# ====================
+# Uploads & Storage
+# ====================
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
+backend/storage/temp/*
+!backend/storage/temp/.gitkeep
+public/uploads/
+public/temp/
+
+# ====================
+# Misc
+# ====================
+*.bak
+*.tmp
+*.temp
+*.orig
+*.rej
+.sass-cache/
+.php_cs.cache
+.eslintcache
+
+# ====================
+# Security & Secrets
+# ====================
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+.secrets/
+
+# ====================
+# External Folders
+# ====================
+# Exclude external/unrelated projects from git
+/argon-dashboard-tailwind-1.0.1/
