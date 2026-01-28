@@ -34,7 +34,7 @@ class DocsController
 
     public function __construct()
     {
-        $this->config = require __DIR__ . '/../../config/documentation.php';
+        $this->config = require __DIR__ . '/../../../config/documentation.php';
     }
 
     /**
