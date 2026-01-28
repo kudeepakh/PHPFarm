@@ -1,4 +1,4 @@
-# 🚀 PHPFrarm - Enterprise API Development Framework
+# 🚀 PHPFarm - Enterprise API Development Framework
 
 <div align="center">
 
