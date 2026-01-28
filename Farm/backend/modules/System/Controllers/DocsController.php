@@ -7,6 +7,7 @@ use Farm\Backend\App\Core\Documentation\ErrorCatalogGenerator;
 use Farm\Backend\App\Core\Documentation\PostmanExporter;
 use PHPFrarm\Core\Attributes\Route;
 use PHPFrarm\Core\Attributes\RouteGroup;
+use PHPFrarm\Core\Attributes\PublicRoute;
 use PHPFrarm\Core\TraceContext;
 
 /**
@@ -43,6 +44,7 @@ class DocsController
      * 
      * @return void
      */
+    #[PublicRoute(reason: 'API documentation must be publicly accessible for developers')]
     #[Route('', method: 'GET', description: 'Swagger UI')]
     public function index(): void
     {
@@ -60,6 +62,7 @@ class DocsController
      * 
      * @return void
      */
+    #[PublicRoute(reason: 'OpenAPI spec must be publicly accessible for API clients')]
     #[Route('/openapi.json', method: 'GET', description: 'OpenAPI spec')]
     public function openapi(): void
     {
@@ -78,6 +81,7 @@ class DocsController
      * 
      * @return void
      */
+    #[PublicRoute(reason: 'Error catalog must be publicly accessible for developers')]
     #[Route('/errors', method: 'GET', description: 'Error catalog')]
     public function errors(): void
     {
@@ -96,6 +100,7 @@ class DocsController
      * 
      * @return void
      */
+    #[PublicRoute(reason: 'Postman collection must be publicly accessible for API testing')]
     #[Route('/postman', method: 'GET', description: 'Postman collection')]
     public function postman(): void
     {
@@ -120,6 +125,7 @@ class DocsController
      * 
      * @return void
      */
+    #[PublicRoute(reason: 'Documentation health check must be publicly accessible')]
     #[Route('/health', method: 'GET', description: 'Docs health')]
     public function health(): void
     {
