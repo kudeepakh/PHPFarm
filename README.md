@@ -17,7 +17,7 @@
 
 ## 📋 Overview
 
-PHPFrarm is an **enterprise-grade API development framework** that enforces security, observability, and scalability standards automatically. It enables teams to build **production-ready REST APIs rapidly** with **100% compliance** to enterprise best practices.
+PHPFarm is an **enterprise-grade API development framework** that enforces security, observability, and scalability standards automatically. It enables teams to build **production-ready REST APIs rapidly** with **100% compliance** to enterprise best practices.
 
 ### 🎯 Built for
 
@@ -65,7 +65,7 @@ PHPFrarm is an **enterprise-grade API development framework** that enforces secu
 ## 🏗️ Architecture
 
 ```
-PHPFrarm/
+PHPFarm/
  ├── Farm/                        # Main framework directory
  │    ├── backend/                # PHP Backend
  │    │    ├── app/Core/          # Framework core
