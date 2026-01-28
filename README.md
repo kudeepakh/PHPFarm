@@ -123,18 +123,29 @@ PHPFrarm/
    ```
 
 5. **Verify installation**
-   - Backend API: http://localhost:8000
-   - Frontend: http://localhost:3000
-   - API Docs: http://localhost:8000/api/docs
+   
+   The default ports are:
+   - **Backend API**: http://localhost:8080 (configurable via `BACKEND_PORT` in .env)
+   - **Frontend**: http://localhost:3000
+   - **API Documentation (Swagger UI)**: http://localhost:8080/docs
+   - **OpenAPI Spec**: http://localhost:8080/docs/openapi.json
+   - **Error Catalog**: http://localhost:8080/docs/errors
+   - **Postman Collection**: http://localhost:8080/docs/postman
+   
+   > **Note**: If you're using a custom port (e.g., 8787), adjust the URLs accordingly:
+   > - API Docs: http://localhost:8787/docs
 
 ### First API Test
 
 ```bash
-# Test the health endpoint
-curl http://localhost:8000/api/v1/health
+# Test the health endpoint (adjust port if needed)
+curl http://localhost:8080/api/v1/health
+
+# Access API Documentation
+# Open in browser: http://localhost:8080/docs
 
 # Register a new user
-curl -X POST http://localhost:8000/api/v1/auth/register \
+curl -X POST http://localhost:8080/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
