@@ -40,7 +40,7 @@ class MicrosoftOAuthProvider implements OAuthProviderInterface
         $this->tenant = env('MICROSOFT_TENANT', 'common'); // common = any account
     }
 
-    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], string $state = ''): string
+    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], ?string $state = null): string
     {
         $scopes = $scopes ?: $this->getDefaultScopes();
         
@@ -50,7 +50,7 @@ class MicrosoftOAuthProvider implements OAuthProviderInterface
             'redirect_uri' => $redirectUri,
             'response_mode' => 'query',
             'scope' => implode(' ', $scopes),
-            'state' => $state
+            'state' => $state ?? ''
         ];
 
         return "https://login.microsoftonline.com/{$this->tenant}/oauth2/v2.0/authorize?" . http_build_query($params);

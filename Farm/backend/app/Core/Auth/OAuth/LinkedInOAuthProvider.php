@@ -34,7 +34,7 @@ class LinkedInOAuthProvider implements OAuthProviderInterface
         $this->clientSecret = env('LINKEDIN_CLIENT_SECRET', '');
     }
 
-    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], string $state = ''): string
+    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], ?string $state = null): string
     {
         $scopes = $scopes ?: $this->getDefaultScopes();
         
@@ -42,7 +42,7 @@ class LinkedInOAuthProvider implements OAuthProviderInterface
             'response_type' => 'code',
             'client_id' => $this->clientId,
             'redirect_uri' => $redirectUri,
-            'state' => $state,
+            'state' => $state ?? '',
             'scope' => implode(' ', $scopes)
         ];
 

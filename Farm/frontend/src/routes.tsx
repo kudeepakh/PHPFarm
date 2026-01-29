@@ -5,7 +5,7 @@ import AuthLayout from '@/layouts/AuthLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import LoginPage from '@/features/auth/LoginPage';
 import DashboardHome from '@/features/dashboard/DashboardHome';
-import LogsViewer from '@/modules/Logs/LogsViewer';
+import LogsViewer from '@/features/logs/LogsViewer';
 import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {

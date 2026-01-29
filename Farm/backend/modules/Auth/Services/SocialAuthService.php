@@ -4,9 +4,10 @@ namespace PHPFrarm\Modules\Auth\Services;
 
 use PHPFrarm\Core\Auth\OAuth\OAuthFactory;
 use PHPFrarm\Modules\Auth\DAO\UserDAO;
-use PHPFrarm\Modules\Auth\Services\TokenService;
+use PHPFrarm\Modules\Auth\Services\AuthService;
 use PHPFrarm\Core\Logger;
 use PHPFrarm\Core\Utils\UuidGenerator;
+use App\Core\Cache\CacheManager;
 
 /**
  * Social Authentication Service
@@ -19,12 +20,14 @@ use PHPFrarm\Core\Utils\UuidGenerator;
 class SocialAuthService
 {
     private UserDAO $userDAO;
-    private TokenService $tokenService;
+    private AuthService $authService;
+    private CacheManager $cache;
 
     public function __construct()
     {
         $this->userDAO = new UserDAO();
-        $this->tokenService = new TokenService();
+        $this->authService = new AuthService();
+        $this->cache = CacheManager::getInstance();
     }
 
     /**
@@ -45,9 +48,8 @@ class SocialAuthService
         // Generate CSRF state token
         $state = bin2hex(random_bytes(16));
         
-        // Store state in session or cache (implementation-specific)
-        $_SESSION['oauth_state'] = $state;
-        $_SESSION['oauth_provider'] = $provider;
+        // Store state in Redis with 10-minute expiration (OAuth timeout)
+        $this->cache->set("oauth_state:{$state}", $provider, 600);
 
         $url = $oauth->getAuthorizationUrl($redirectUri, [], $state);
 
@@ -74,17 +76,19 @@ class SocialAuthService
     public function handleCallback(string $provider, string $code, string $state, string $redirectUri): array
     {
         // Verify state (CSRF protection)
-        if (empty($_SESSION['oauth_state']) || $state !== $_SESSION['oauth_state']) {
-            throw new \Exception('Invalid state parameter (CSRF attack detected)');
+        $cachedProvider = $this->cache->get("oauth_state:{$state}");
+        
+        if ($cachedProvider === null) {
+            throw new \Exception('Invalid or expired state parameter (CSRF attack detected or session timeout)');
         }
 
         // Verify provider matches
-        if (empty($_SESSION['oauth_provider']) || $provider !== $_SESSION['oauth_provider']) {
+        if ($provider !== $cachedProvider) {
             throw new \Exception('Provider mismatch');
         }
 
-        // Clear session state
-        unset($_SESSION['oauth_state'], $_SESSION['oauth_provider']);
+        // Clear cache state
+        $this->cache->delete("oauth_state:{$state}");
 
         $oauth = OAuthFactory::getProvider($provider);
 
@@ -104,8 +108,8 @@ class SocialAuthService
         // Find or create user
         $user = $this->findOrCreateOAuthUser($provider, $userInfo);
 
-        // Generate JWT tokens
-        $tokens = $this->tokenService->generateTokens($user['user_id']);
+        // Use AuthService to login the user (generates tokens with proper session tracking)
+        $loginResult = $this->authService->loginWithOtpIdentifier($user['email']);
 
         Logger::audit('OAuth login successful', [
             'user_id' => $user['user_id'],
@@ -115,7 +119,12 @@ class SocialAuthService
 
         return [
             'user' => $user,
-            'tokens' => $tokens,
+            'tokens' => [
+                'access_token' => $loginResult['token'],
+                'refresh_token' => $loginResult['refresh_token'],
+                'access_expires_at' => $loginResult['expires_at'],
+                'refresh_expires_at' => $loginResult['refresh_expires_at']
+            ],
             'oauth_provider' => $provider
         ];
     }

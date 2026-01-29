@@ -54,7 +54,7 @@ class AppleOAuthProvider implements OAuthProviderInterface
         }
     }
 
-    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], string $state = ''): string
+    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], ?string $state = null): string
     {
         $scopes = $scopes ?: $this->getDefaultScopes();
         
@@ -64,7 +64,7 @@ class AppleOAuthProvider implements OAuthProviderInterface
             'response_type' => 'code id_token',
             'response_mode' => 'form_post', // Apple uses POST callback
             'scope' => implode(' ', $scopes),
-            'state' => $state
+            'state' => $state ?? ''
         ];
 
         return 'https://appleid.apple.com/auth/authorize?' . http_build_query($params);

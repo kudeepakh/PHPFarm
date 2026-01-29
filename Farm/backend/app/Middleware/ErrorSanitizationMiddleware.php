@@ -41,51 +41,95 @@ class ErrorSanitizationMiddleware
      */
     public static function handle(array $request, callable $next): mixed
     {
+        $isDev = self::isDevelopment();
+        
         try {
             return $next($request);
         } catch (\InvalidArgumentException $e) {
             // Client-side validation errors - safe to show message
             self::logError($e, $request, 'validation_error');
             Response::badRequest('validation.failed', [
-                'message' => self::sanitizeMessage($e->getMessage())
+                'message' => self::sanitizeMessage($e->getMessage()),
+                ...($isDev ? self::getDebugInfo($e) : [])
             ]);
         } catch (\UnauthorizedHttpException $e) {
             self::logError($e, $request, 'unauthorized');
-            Response::unauthorized('error.unauthorized');
+            Response::unauthorized('error.unauthorized', $isDev ? self::getDebugInfo($e) : []);
         } catch (\ForbiddenHttpException $e) {
             self::logError($e, $request, 'forbidden');
-            Response::forbidden('error.forbidden');
+            Response::forbidden('error.forbidden', $isDev ? self::getDebugInfo($e) : []);
         } catch (\NotFoundHttpException $e) {
             self::logError($e, $request, 'not_found');
-            Response::notFound('error.not_found');
+            Response::notFound('error.not_found', $isDev ? self::getDebugInfo($e) : []);
         } catch (\TooManyRequestsHttpException $e) {
             self::logError($e, $request, 'rate_limit');
-            Response::tooManyRequests('error.too_many_requests');
+            Response::tooManyRequests('error.too_many_requests', $isDev ? self::getDebugInfo($e) : []);
         } catch (\PDOException $e) {
-            // Database errors - NEVER expose to client
+            // Database errors - show in dev, hide in production
             self::logError($e, $request, 'database_error');
-            Response::serverError('error.database_unavailable', 503, 'ERR_DATABASE_UNAVAILABLE');
+            if ($isDev) {
+                Response::serverError($e->getMessage(), 503, 'ERR_DATABASE_UNAVAILABLE', self::getDebugInfo($e));
+            } else {
+                Response::serverError('error.database_unavailable', 503, 'ERR_DATABASE_UNAVAILABLE');
+            }
         } catch (\RuntimeException $e) {
             // Runtime errors - check if it's a known domain error
             $message = $e->getMessage();
             
             if (self::isSafeDomainError($message)) {
                 self::logError($e, $request, 'domain_error');
-                Response::serverError($message, 400, 'ERR_DOMAIN');
+                Response::serverError($message, 400, 'ERR_DOMAIN', $isDev ? self::getDebugInfo($e) : []);
             } else {
-                // Unknown runtime error - sanitize
+                // Unknown runtime error - show in dev, sanitize in production
                 self::logError($e, $request, 'runtime_error');
-                Response::serverError('error.unexpected', 500, 'ERR_INTERNAL_SERVER');
+                if ($isDev) {
+                    Response::serverError($e->getMessage(), 500, 'ERR_INTERNAL_SERVER', self::getDebugInfo($e));
+                } else {
+                    Response::serverError('error.unexpected', 500, 'ERR_INTERNAL_SERVER');
+                }
             }
         } catch (\Exception $e) {
-            // All other exceptions - NEVER expose details
+            // All other exceptions - show in dev, hide in production
             self::logError($e, $request, 'unhandled_exception');
-            Response::serverError('error.unexpected', 500, 'ERR_INTERNAL_SERVER');
+            if ($isDev) {
+                Response::serverError($e->getMessage(), 500, 'ERR_INTERNAL_SERVER', self::getDebugInfo($e));
+            } else {
+                Response::serverError('error.unexpected', 500, 'ERR_INTERNAL_SERVER');
+            }
         } catch (\Error $e) {
-            // Fatal errors - log and return generic error
+            // Fatal errors - show in dev, hide in production
             self::logError($e, $request, 'fatal_error');
-            Response::serverError('error.system_error', 500, 'ERR_SYSTEM_ERROR');
+            if ($isDev) {
+                Response::serverError($e->getMessage(), 500, 'ERR_SYSTEM_ERROR', self::getDebugInfo($e));
+            } else {
+                Response::serverError('error.system_error', 500, 'ERR_SYSTEM_ERROR');
+            }
         }
+    }
+    
+    /**
+     * Check if running in development environment
+     */
+    private static function isDevelopment(): bool
+    {
+        $env = $_ENV['APP_ENV'] ?? 'production';
+        return in_array(strtolower($env), ['dev', 'development', 'local'], true);
+    }
+    
+    /**
+     * Get debug information for development environment
+     */
+    private static function getDebugInfo(\Throwable $e): array
+    {
+        return [
+            'debug' => [
+                'error' => $e->getMessage(),
+                'exception' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => explode("\n", $e->getTraceAsString())
+            ]
+        ];
     }
     
     /**

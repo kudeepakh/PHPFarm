@@ -16,7 +16,7 @@ import CacheManagement from '@/features/cache/CacheManagement';
 import SecurityCenter from '@/features/security/SecurityCenter';
 import UserManagement from '@/features/users/UserManagement';
 import RoleManagement from '@/features/roles/RoleManagement';
-import LogsViewer from '@/modules/Logs/LogsViewer';
+import LogsViewer from '@/features/logs/LogsViewer';
 import { useAuth } from '@/hooks/useAuth';
 import './index.css';
 

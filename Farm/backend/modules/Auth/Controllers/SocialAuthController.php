@@ -14,14 +14,14 @@ use PHPFrarm\Modules\Auth\Services\SocialAuthService;
  * Handles OAuth login endpoints for Google, Facebook, GitHub
  * 
  * Routes:
- * - GET  /api/auth/social/{provider}             → Start OAuth flow
- * - GET  /api/auth/social/{provider}/callback    → OAuth callback
- * - POST /api/auth/social/{provider}/unlink      → Unlink provider
- * - GET  /api/auth/social/providers              → List linked providers
+ * - GET  /api/v1/auth/social/{provider}             → Start OAuth flow
+ * - GET  /api/v1/auth/social/{provider}/callback    → OAuth callback
+ * - POST /api/v1/auth/social/{provider}/unlink      → Unlink provider
+ * - GET  /api/v1/auth/social/providers              → List linked providers
  * 
  * @package PHPFrarm\Modules\Auth\Controllers
  */
-#[RouteGroup('/api/auth/social', middleware: ['cors'])]
+#[RouteGroup('/api/v1/auth/social', middleware: ['cors'])]
 class SocialAuthController extends BaseController
 {
     private SocialAuthService $socialAuthService;
@@ -58,7 +58,7 @@ class SocialAuthController extends BaseController
         }
 
         // Validate provider
-        $allowedProviders = ['google', 'facebook', 'github'];
+        $allowedProviders = ['google', 'facebook', 'github', 'microsoft', 'azure', 'azuread', 'apple', 'linkedin', 'twitter', 'x'];
         if (!in_array($provider, $allowedProviders)) {
             $this->sendError("Invalid provider. Allowed: " . implode(', ', $allowedProviders), 400);
             return;
@@ -67,14 +67,26 @@ class SocialAuthController extends BaseController
         try {
             $result = $this->socialAuthService->getAuthorizationUrl($provider, $redirectUri);
 
-            $this->sendSuccess([
-                'authorization_url' => $result['url'],
-                'state' => $result['state'],
-                'provider' => $provider
-            ], 'OAuth authorization URL generated');
+            // Redirect to provider's authorization page
+            header('Location: ' . $result['url']);
+            http_response_code(302);
+            exit;
 
         } catch (\Exception $e) {
-            $this->sendError($e->getMessage(), 500, 'OAUTH_INIT_FAILED');
+            error_log("Social Auth Error: " . $e->getMessage() . " at " . $e->getFile() . ":" . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            // In development, show detailed errors
+            $env = $_ENV['APP_ENV'] ?? 'production';
+            if (in_array($env, ['dev', 'development', 'local'])) {
+                $this->sendError($e->getMessage(), 500, 'OAUTH_INIT_FAILED', [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => explode("\n", $e->getTraceAsString())
+                ]);
+            } else {
+                $this->sendError('OAuth initialization failed', 500, 'OAUTH_INIT_FAILED');
+            }
         }
     }
 

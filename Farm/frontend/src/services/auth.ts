@@ -166,7 +166,8 @@ export const authService = {
   initiateSocialLogin: (provider: string, redirectUri?: string): void => {
     const baseUrl = window.location.origin;
     const redirect = redirectUri || `${baseUrl}/auth/callback`;
-    const authUrl = `/api/v1/auth/social/${provider}?redirect_uri=${encodeURIComponent(redirect)}`;
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    const authUrl = `${apiUrl}/api/v1/auth/social/${provider}?redirect_uri=${encodeURIComponent(redirect)}`;
     window.location.href = authUrl;
   },
 

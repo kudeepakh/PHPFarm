@@ -35,7 +35,7 @@ class TwitterOAuthProvider implements OAuthProviderInterface
         $this->clientSecret = env('TWITTER_CLIENT_SECRET', '');
     }
 
-    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], string $state = ''): string
+    public function getAuthorizationUrl(string $redirectUri, array $scopes = [], ?string $state = null): string
     {
         $scopes = $scopes ?: $this->getDefaultScopes();
         
@@ -51,7 +51,7 @@ class TwitterOAuthProvider implements OAuthProviderInterface
             'client_id' => $this->clientId,
             'redirect_uri' => $redirectUri,
             'scope' => implode(' ', $scopes),
-            'state' => $state,
+            'state' => $state ?? '',
             'code_challenge' => $codeChallenge,
             'code_challenge_method' => 'S256'
         ];

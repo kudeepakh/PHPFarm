@@ -1,71 +1,12 @@
 <?php
 
 /**
- * PHPFrarm Framework Bootstrap
- * Entry point for all API requests
+ * Application Entry Point
  * 
- * Features:
- * - Auto-loads all modules from /modules directory
- * - Configurable middleware per route
- * - No need to modify this file when adding new modules
+ * Minimal entry point - all initialization happens in bootstrap
  */
 
-// PERFORMANCE OPTIMIZATION: Fast-path for health checks
-// This bypasses the entire framework for critical endpoints
-$requestUri = $_SERVER['REQUEST_URI'] ?? '';
-$requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-
-if ($requestMethod === 'GET' && preg_match('/\/api\/v\d+\/auth\/health\b/', $requestUri)) {
-    header('Content-Type: application/json');
-    
-    // CORS headers for health endpoint
-    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-    if (in_array($origin, ['http://localhost:3000', 'http://localhost:3900', 'http://127.0.0.1:3000', 'http://127.0.0.1:3900'])) {
-        header('Access-Control-Allow-Origin: ' . $origin);
-        header('Access-Control-Allow-Credentials: true');
-    } else {
-        header('Access-Control-Allow-Origin: *');
-    }
-    header('Access-Control-Allow-Methods: GET, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-    
-    $response = [
-        'status' => 'ok',
-        'timestamp' => date('c'),
-        'version' => 'v1',
-        'server' => 'PHPFrarm',
-        'endpoint' => 'health'
-    ];
-    
-    http_response_code(200);
-    echo json_encode($response, JSON_UNESCAPED_SLASHES);
-    exit;
-}
-
-// Handle CORS preflight for all endpoints
-if ($requestMethod === 'OPTIONS') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-Correlation-Id, X-Transaction-Id, X-Request-Id');
-    header('Access-Control-Max-Age: 86400'); // 24 hours
-    header('Access-Control-Allow-Credentials: true');
-    http_response_code(204);
-    exit;
-}
-
-// Load Composer autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
-
-// Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
-
-// Define env() helper function for config files
-if (!function_exists('env')) {
-    function env(string $key, mixed $default = null): mixed {
-        return $_ENV[$key] ?? $default;
-    }
-}
+require_once __DIR__ . '/../bootstrap/app.php';
 
 // Import core classes
 use PHPFrarm\Core\TraceContext;
@@ -117,9 +58,19 @@ set_exception_handler(function ($exception) {
         'type' => get_class($exception)
     ]);
     
-    // NEVER expose internal details to clients - even in debug mode
-    // Use correlation ID to find logs if debugging is needed
-    Response::serverError('error.unexpected');
+    // In development, show detailed errors for easier debugging
+    $env = $_ENV['APP_ENV'] ?? 'production';
+    if (in_array($env, ['dev', 'development', 'local'])) {
+        Response::error([
+            'error' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'trace' => explode("\n", $exception->getTraceAsString())
+        ], 500, 'UNHANDLED_EXCEPTION');
+    } else {
+        // Production: hide internal details, use correlation ID to find logs
+        Response::serverError('error.unexpected');
+    }
 });
 
 // Register global middleware

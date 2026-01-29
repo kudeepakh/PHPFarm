@@ -4,9 +4,10 @@ import { ApiResponse, ApiError } from '@/types/api';
 // Create axios instance with base configuration
 const createApiClient = (): AxiosInstance => {
   // Use the backend service URL for Docker environment
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
   const baseURL = process.env.NODE_ENV === 'production' 
     ? '/api/v1'  // In production, use relative URLs with nginx proxy
-    : 'http://localhost:8787/api/v1';  // In development, directly connect to backend
+    : `${apiUrl}/api/v1`;  // In development, use configured backend URL
     
   const client = axios.create({
     baseURL,

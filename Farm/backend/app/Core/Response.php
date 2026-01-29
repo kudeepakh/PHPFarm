@@ -145,34 +145,34 @@ class Response
     /**
      * Send 401 Unauthorized
      */
-    public static function unauthorized(string $message = 'Unauthorized'): void
+    public static function unauthorized(string $message = 'Unauthorized', array $errors = []): void
     {
         $translatedMessage = Translator::has($message) ? Translator::translate($message) : $message;
-        self::error($translatedMessage, 401, 'ERR_UNAUTHORIZED');
+        self::error($translatedMessage, 401, 'ERR_UNAUTHORIZED', $errors);
     }
 
     /**
      * Send 403 Forbidden
      */
-    public static function forbidden(string $message = 'Forbidden'): void
+    public static function forbidden(string $message = 'Forbidden', array $errors = []): void
     {
-        self::error(Translator::has($message) ? $message : 'error.forbidden', 403, 'ERR_FORBIDDEN');
+        self::error(Translator::has($message) ? $message : 'error.forbidden', 403, 'ERR_FORBIDDEN', $errors);
     }
 
     /**
      * Send 404 Not Found
      */
-    public static function notFound(string $message = 'Resource not found'): void
+    public static function notFound(string $message = 'Resource not found', array $errors = []): void
     {
-        self::error(Translator::has($message) ? $message : 'error.not_found', 404, 'ERR_NOT_FOUND');
+        self::error(Translator::has($message) ? $message : 'error.not_found', 404, 'ERR_NOT_FOUND', $errors);
     }
 
     /**
      * Send 429 Too Many Requests
      */
-    public static function tooManyRequests(string $message = 'Too many requests'): void
+    public static function tooManyRequests(string $message = 'Too many requests', array $errors = []): void
     {
-        self::error(Translator::has($message) ? $message : 'error.too_many_requests', 429, 'ERR_RATE_LIMIT_EXCEEDED');
+        self::error(Translator::has($message) ? $message : 'error.too_many_requests', 429, 'ERR_RATE_LIMIT_EXCEEDED', $errors);
     }
 
     /**
